@@ -151,11 +151,12 @@ def print_chromedriver_path():
     print(get_chromedriver_path())
 
 
-def download_chromedriver(cwd=False):
+def download_chromedriver(cwd=False, p_install=None):
     """
     Downloads, unzips and installs chromedriver.
     If a chromedriver binary is found in PATH it will be copied, otherwise downloaded.
 
+    :param p_install: Custom install location
     :param cwd: Flag indicating whether to download to current working directory
     :return: The file path of chromedriver
     """
@@ -169,7 +170,13 @@ def download_chromedriver(cwd=False):
         return
     major_version = get_major_version(chromedriver_version)
 
-    if cwd:
+    # allow custom path for install
+    if not p_install is None:
+        chromedriver_dir = os.path.join(
+            os.path.abspath(str(p_install)),
+            major_version
+        )
+    elif cwd:
         chromedriver_dir = os.path.join(
             os.path.abspath(os.getcwd()),
             major_version
